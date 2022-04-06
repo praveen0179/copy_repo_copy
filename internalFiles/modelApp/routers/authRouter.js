@@ -1,3 +1,9 @@
+const express = require('express');
+
+const app = express();
+
+const authRouter = express.Router();
+
 authRouter.route('/signUp').get(middleWare, getSignUp, middleWareX).post(postSignUp);
 
 function middleWare(req, res, next)
@@ -11,7 +17,6 @@ function middleWareX(req, res)
     res.sendFile('./public/index.html', {root:__dirname});
     console.log("middleWare x reached");
 }
-
 
 function getSignUp(req, res, next)
 {
@@ -33,3 +38,42 @@ async function postSignUp(req, res)
         user: data
     });
 }
+
+
+const JWT = require('jsonwebtoken');
+const jwt_key = 'rbjdi3837fj';
+
+authRouter.route('/login', loginFunction);
+
+async function loginFunction(req, res)
+{
+   let data = req.body;
+   
+   let user = await userModel.findOne({email: data.email});
+
+   if(user)
+   {
+       if(user.password==data.password)
+       {
+            let uid = user['_id'];
+            let token = JWT.sign({payload:uid}, jwt_key);
+            res.cookie('isLoggedin', token, {httpOnly: true});
+            return res.json(
+                {
+                    message: "user is logged in ",
+                    user: data
+                }
+            )
+       }
+   }
+   else
+   {
+       res.json(
+           {
+               message: "User not found"
+           }
+       )
+   }
+}
+
+module.exports = authRouter;

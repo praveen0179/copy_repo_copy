@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 
 const url = 'mongodb+srv://user_31:N69OQzrpgctyr9E0@cluster0.jsm79.mongodb.net/thisShit?retryWrites=true&w=majority';
 
-
 //UserSchema
 const userSchema = mongo.Schema({
     name:{

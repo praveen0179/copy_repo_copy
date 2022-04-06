@@ -1,5 +1,9 @@
 const userModel = require('../mongo');
 
+const express = require('express');
+
+const userRouter = express.Router();
+
 userRouter.route('/').get(getUser).post(postUser).patch(updateUser).delete(deleteUser);
 
 userRouter.route('/getCookies').get(getCookies);
@@ -48,10 +52,11 @@ async function deleteUser(req, res)
     let dataTodel= req.body;
     let user = await userModel.findOneAndDelete(dataTodel);
     res.json(
-    {
-        message: "Deleted-Successfully",
-        data: user
-    });
+        {
+            message: "Deleted-Successfully",
+            data: user
+        }
+    );
 }
 
 function getUserById(req, res)
@@ -61,9 +66,9 @@ function getUserById(req, res)
     res.send(users[req.params.id]);
 
     res.json(
-    {
-        message: "Id received successfully",
-    }
+        {
+            message: "Id received successfully",
+        }
     );
 }
 
@@ -79,3 +84,5 @@ function getCookies(req, res)
 
     console.log("Cookie is being created");
 }
+
+module.exports = userRouter;
